@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-var glob = require("glob");
 function explorer(path){
     fs.readdir(path, function(err, files){
         //err 为错误 , files 文件名列表包含文件夹与文件
@@ -17,9 +16,17 @@ function explorer(path){
                 }else{
                     // 读出所有的文件
                     // console.log('文件名:' + path + '/' + file);
-                    fs.readFile(path.resolve(__dirname,path + '/' + file), {flag: 'r+', encoding: 'utf8'},function(err, data) {
-                        console.log(111, data);
-                    })
+                    if(file.endsWith('.js') || file.endsWith('.vue')) {
+                        fs.readFile(path + '/' + file, {flag: 'r+', encoding: 'utf8'},function(err, data) {
+                            data = data.replace(/@/g, '@/mobile');
+                            fs.writeFile(path + '/' + file, data, (err) => {
+                                if (err) throw err;
+                                fs.readFile(path + '/' + file, {flag: 'r+', encoding: 'utf8'},function(err, newData) {
+                                    console.log(111, newData);
+                                })
+                              });
+                        })
+                    }
                 }
             });
             
@@ -27,4 +34,4 @@ function explorer(path){
     });
 }
     
-explorer('./src');
+explorer(path.resolve('./src'));
