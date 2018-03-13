@@ -69,17 +69,16 @@ this.options = _.extend({
 
 - template: 本地模板文件的位置，支持加载器(如handlebars、ejs、undersore、html等)，如比如 handlebars!src/index.hbs；
 关于template补充几点：
-
 1、template配置项在html文件使用file-loader时，其所指定的位置找不到，导致生成的html文件内容不是期望的内容。
 2、为template指定的模板文件没有指定任何loader的话，默认使用ejs-loader。如template: './index.html'，若没有为.html指定任何loader就使用ejs-loader
 
 - templateContent: string|function，可以指定模板的内容，不能与template共存。配置值为function时，可以直接返回html字符串，也可以异步调用返回html字符串。
 
 - inject：向template或者templateContent中注入所有静态资源，不同的配置值注入的位置不经相同。
-
 1、true或者body：所有JavaScript资源插入到body元素的底部
 2、head: 所有JavaScript资源插入到head元素中
 3、false： 所有静态资源css和JavaScript都不会注入到模板文件中
+
 - favicon: 添加特定favicon路径到输出的html文档中，这个同title配置项，需要在模板中动态获取其路径值
 
 - hash：true|false，是否为所有注入的静态资源添加webpack每次编译产生的唯一hash值，添加hash形式如下所示：
