@@ -10,3 +10,7 @@ router.push({path: 'home', query: { userId: 123 }});
 ```
 
 如果提供了path, params会被忽略
+
+## 使用webpack配置vue项目代理
+
+https://www.cnblogs.com/DY9412/p/7873847.html
