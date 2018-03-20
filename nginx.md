@@ -1,5 +1,6 @@
 [nginx反向代理-解决跨域问题](https://www.cnblogs.com/renjing/p/6394725.html)
 [nginx到底是干啥的](https://segmentfault.com/q/1010000010360640)
+[使用webpack配置vue项目代理 （超简单）](https://www.cnblogs.com/DY9412/p/7873847.html)
 
 跨域是浏览器的限制;
 
