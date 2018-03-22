@@ -63,13 +63,115 @@ app.listen(3100);
     <div id="main"></div>
     <script>
         fetch('http://server.com:3100').then((res) => {
-            document.getElementById('main').innerHTML = res;
+            res.text()
+            .then(
+                res => {
+                    document.getElementById('main').innerHTML = res;
+                }
+            );
         })
     </script>
 </body>
 </html>
 ```
-在浏览器中打开页面 file:///Users/wangyaxing/github/try-koa/home.html ,此时浏览器的控制台报错 有跨域问题,我们都知道: 协议,域名,端口号只要有一样不同就会有跨域问题;现在我们使用的协议是file协议,而我们访问的接口地址是http协议,所以存在跨域问题;
+在浏览器中打开页面 file:///Users/wangyaxing/github/try-koa/index.html ,此时浏览器的控制台报错 有跨域问题,我们都知道: 协议,域名,端口号只要有一样不同就会有跨域问题;现在我们使用的协议是file协议,而我们访问的接口地址是http协议,所以存在跨域问题;
+file协议很不正经,利用 SwitchHosts 给localhost起另一个别名
+```js
+127.0.0.1	localhost
+127.0.0.1	server.com // 作为服务端域名
+127.0.0.1	client.com // 作为客户端域名
+```
+在nginx中配置
+
+```js
+{
+    server {
+        listen 80;
+        server_name client.com;
+        root /Users/wangyaxing/github/try-koa; // 转到跟目录
+    }
+}
+
+```
+每次修改完nginx,需要在命令行重启nginx, `sudo nginx -s reload`;
+
+> nginx常用命令
+```js
+sudo nginx //启动Nginx
+
+sudo nginx -s reload //重启nginx
+
+sudo nginx -s quit //退出nginx
+```
+
+此时 打开 http://client.com 页面,浏览器控制台报跨域的错误(服务器域名: server.com; 客户端域名: client.com)
+
+当然我们可以在后端配置cors
+
+```js
+const Koa = require('koa');
+const app = new Koa();
+
+
+const main = ctx => {
+    ctx.response.body = 'Hello World';
+    ctx.set('Access-Control-Allow-Origin', '*');
+};
+  
+app.use(main);
+app.listen(3100);
+```
+再次访问 http://client.com, 页面显示出 'hellp world';
+
+下面来配置nginx解决跨域问题
+```js
+{
+    server {
+        listen 80; // 默认监听80端口
+        server_name server.com;
+
+        location / {
+            proxy_pass http://server.com:3100/;
+            add_header Access-Control-Allow-Origin *;
+        }
+    }
+    server {
+        listen 80;
+        server_name client.com;
+        root /Users/wangyaxing/github/try-koa;
+
+    }
+}
+```
+修改html文件接口请求部分
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="main"></div>
+    <script>
+        fetch('http://server.com').then((res) => {
+            res.text()
+            .then(
+                res => {
+                    document.getElementById('main').innerHTML = res;
+                }
+            );
+        })
+    </script>
+</body>
+</html>
+```
+因为nginx默认监听80端口,通过80端口转发到server.com的3100端口,解决了跨域问题
+
+全程要理解hosts是给IP起了一个别名
+
 
 
 
