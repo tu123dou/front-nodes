@@ -187,6 +187,11 @@ const store = new Vuex.Store({
 如果你希望使用全局 state 和 getter，rootState 和 rootGetter 会作为第三和第四参数传入 getter，也会通过 context 对象的属性传入 action。
 若需要在全局命名空间内分发 action 或提交 mutation，将 { root: true } 作为第三参数传给 dispatch 或 commit 即可。
 
+# 需要注意的点
+
+## 默认情况下,模块内的getter, mutation,action是注册在全局空间的,state只注册在局部命名空间的;
+要想使模块内的getter, mutation,action注册在模块命名空间,必须在模块内加上 namespaced: true
+
 ![未使用命名空间](http://cdn.wangyaxing.top/vuex1.jpeg)
 ![使用命名空间](http://cdn.wangyaxing.top/vuex2.jpeg)
 使用命名空间在调用action时必须使用
@@ -202,3 +207,9 @@ const store = new Vuex.Store({
   ```
 
   [参考链接](https://stackoverflow.com/questions/41833424/how-to-access-vuex-module-getters-and-mutations)
+
+
+## 页面刷新时,store中的数据会清空
+
+解决方案
+https://stackoverflow.com/questions/43027499/vuex-state-on-page-refresh
