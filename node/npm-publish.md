@@ -79,7 +79,7 @@ test.fu();
 node in.js
 ```
 就可以输出这是我的第一个npm包
-
+666
 ## 参考
 - [【npm】利用npm安装/删除/发布/更新/撤销发布包](https://www.cnblogs.com/penghuwan/p/6973702.html#_label3_0)
 - [在npm发布自己的包](https://segmentfault.com/a/1190000010224751)
